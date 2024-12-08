@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Foody</string>
+    <string name="logo_description">Logo of Foody</string>
+    <string name="welcome_text">Welcome to Foody</string>
+    <string name="email_label">Email</string>
+    <string name="email_hint">Enter your email</string>
+    <string name="password_label">Password</string>
+    <string name="password_hint">Enter your password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="search_hint">"Search restaurants or dishes"</string>
+    <string name="location_description">Location</string>
+    <string name="location">"Limerick"</string>
+    <string name="search_description">Search</string>
+    <string name="restaurants">"Restaurants"</string>
+    <string name="profile">"Profile"</string>
+    <string name="home">"Home"</string>
+    <string name="logout">"Logout"</string>
+    <string name="account">"Account: "</string>
+    <string name="user">"user@example.com"</string>
+    <string name="filter_description">"Filter"</string>
+    <string name="create_account">Create Account</string>
+    <string name="confirm_password_label">Confirm Password</string>
+    <string name="confirm_password_hint">Confirm your password</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="reset_password_instructions">Enter your email address and we wll send you a link to reset your password.</string>
+    <string name="back_to_login">Back to Login</string>
+    <string name="send_reset_link">Send Reset Link</string>
+    <string name="restaurant_image_description">Restaurant image</string>
+    <string name="menu_item_image_description">Menu item image</string>
+    <string name="decrease_quantity_description">Decrease quantity</string>
+    <string name="increase_quantity_description">Increase quantity</string>
+    <string name="default_quantity">0</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="total">Total</string>
+    <string name="delivery_fee">Delivery Fee</string>
+    <string name="checkout">Checkout</string>
+    <string name="view_cart">View Cart</string>
+
+</resources>
