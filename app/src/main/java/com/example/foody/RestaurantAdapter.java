@@ -16,21 +16,23 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+// Adapter class for displaying restaurant list in RecyclerView
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder> {
     private final Context context;
-    private List<Restaurant> restaurants;  // 移除final修饰符以允许更新
+    private List<Restaurant> restaurants;  // Removed final modifier to allow updates
 
     public RestaurantAdapter(Context context, List<Restaurant> restaurants) {
         this.context = context;
         this.restaurants = restaurants;
     }
 
-    // 添加更新数据的方法
+    // Method to update restaurant list data
     public void updateData(List<Restaurant> newRestaurants) {
         this.restaurants = newRestaurants;
         notifyDataSetChanged();
     }
 
+    // Creates new views for list items
     @NonNull
     @Override
     public RestaurantViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -39,21 +41,25 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
         return new RestaurantViewHolder(view);
     }
 
+    // Binds data to views for each list item
     @Override
     public void onBindViewHolder(@NonNull RestaurantViewHolder holder, int position) {
         Restaurant restaurant = restaurants.get(position);
 
+        // Set text data
         holder.tvRestaurantName.setText(restaurant.getName());
         holder.tvCuisine.setText(restaurant.getCuisine());
         holder.tvRating.setText(String.format(Locale.US, "%.1f", restaurant.getRating()));
         holder.tvDeliveryTime.setText(restaurant.getDeliveryTime());
         holder.tvPriceRange.setText(restaurant.getPriceRange());
 
+        // Load restaurant image using Glide
         Glide.with(holder.itemView.getContext())
                 .load(restaurant.getImageUrl())
                 .centerCrop()
                 .into(holder.ivRestaurant);
 
+        // Set click listener to open restaurant details
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, RestaurantDetailActivity.class);
             intent.putExtra("restaurant", restaurant);
@@ -66,6 +72,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
         return restaurants.size();
     }
 
+    // ViewHolder class to cache view references
     public static class RestaurantViewHolder extends RecyclerView.ViewHolder {
         ImageView ivRestaurant;
         TextView tvRestaurantName;
@@ -74,6 +81,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
         TextView tvDeliveryTime;
         TextView tvPriceRange;
 
+        // Initialize view references
         RestaurantViewHolder(@NonNull View itemView) {
             super(itemView);
             ivRestaurant = itemView.findViewById(R.id.ivRestaurant);

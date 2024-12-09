@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+// Main screen showing restaurant list and search functionality
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private RecyclerView rvRestaurants;
@@ -42,12 +43,15 @@ public class MainActivity extends AppCompatActivity {
         setupBottomNavigation();
     }
 
+    // Initialize UI elements
     private void initViews() {
         rvRestaurants = findViewById(R.id.rvRestaurants);
         etSearch = findViewById(R.id.etSearch);
     }
 
+    // Set up search functionality with real-time filtering
     private void setupSearchFunction() {
+        // Handle search action on keyboard
         etSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 performSearch(etSearch.getText().toString());
@@ -58,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
+        // Listen for text changes for real-time search
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -72,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Filter restaurants based on search query
     private void performSearch(String query) {
         query = query.toLowerCase().trim();
         List<Restaurant> filteredList = new ArrayList<>();
@@ -90,10 +96,12 @@ public class MainActivity extends AppCompatActivity {
         restaurantAdapter.updateData(filteredList);
     }
 
+    // Set up RecyclerView with restaurant list
     private void setupRestaurantsRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rvRestaurants.setLayoutManager(layoutManager);
 
+        // Add sample restaurants
         allRestaurants.add(new Restaurant(
                 "Asian Restaurant",
                 "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg",
@@ -124,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
         restaurantAdapter = new RestaurantAdapter(this, new ArrayList<>(allRestaurants));
         rvRestaurants.setAdapter(restaurantAdapter);
 
+        // Add spacing between items
         int spacing = (int) (16 * getResources().getDisplayMetrics().density);
         rvRestaurants.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
@@ -134,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Set up bottom navigation bar
     private void setupBottomNavigation() {
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
         bottomNav.setOnItemSelectedListener(item -> {
@@ -148,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Reset bottom navigation selection when returning to activity
     @Override
     protected void onResume() {
         super.onResume();
@@ -155,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNav.setSelectedItemId(R.id.nav_home);
     }
 
+    // Check if user is logged in
     @Override
     protected void onStart() {
         super.onStart();
@@ -164,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Redirect to login screen if user is not authenticated
     private void startLoginActivity() {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

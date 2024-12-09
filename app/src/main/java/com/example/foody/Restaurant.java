@@ -2,7 +2,9 @@ package com.example.foody;
 
 import java.io.Serializable;
 
+// Model class representing a restaurant with its basic information
 public class Restaurant implements Serializable {
+    // Restaurant details
     private final String name;
     private final String imageUrl;
     private final float rating;
@@ -10,6 +12,7 @@ public class Restaurant implements Serializable {
     private final String deliveryTime;
     private final String priceRange;
 
+    // Constructor to initialize all restaurant properties
     public Restaurant(String name, String imageUrl, float rating, String cuisine, String deliveryTime, String priceRange) {
         this.name = name;
         this.imageUrl = imageUrl;
@@ -19,6 +22,7 @@ public class Restaurant implements Serializable {
         this.priceRange = priceRange;
     }
 
+    // Getter methods for accessing restaurant properties
     public String getName() { return name; }
     public String getImageUrl() { return imageUrl; }
     public float getRating() { return rating; }

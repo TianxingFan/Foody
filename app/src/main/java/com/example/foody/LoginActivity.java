@@ -13,7 +13,9 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 
+// Login screen activity that handles user authentication
 public class LoginActivity extends AppCompatActivity {
+    // UI elements
     private TextInputEditText etEmail, etPassword;
     private MaterialButton btnLogin, btnRegister;
     private TextView tvForgotPassword;
@@ -24,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Get Firebase authentication instance
         firebaseAuth = FirebaseAuth.getInstance();
 
         initViews();
@@ -40,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    // Initialize all UI elements
     private void initViews() {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
@@ -48,12 +52,14 @@ public class LoginActivity extends AppCompatActivity {
         tvForgotPassword = findViewById(R.id.tvForgotPassword);
     }
 
+    // Set up click listeners for buttons
     private void setupClickListeners() {
         btnLogin.setOnClickListener(v -> attemptLogin());
         btnRegister.setOnClickListener(v -> handleRegister());
         tvForgotPassword.setOnClickListener(v -> handleForgotPassword());
     }
 
+    // Handle login process
     private void attemptLogin() {
         String email = Objects.requireNonNull(etEmail.getText()).toString().trim();
         String password = Objects.requireNonNull(etPassword.getText()).toString().trim();
@@ -62,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+        // Try to sign in with Firebase
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
@@ -72,10 +79,10 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    // Handle different types of login errors
     private void handleLoginError(Exception exception) {
         String errorMessage = "Authentication failed";
         if (exception != null) {
-            // Customize error messages based on exception type
             String message = exception.getMessage();
             if (message != null) {
                 if (message.contains("password is invalid")) {
@@ -90,16 +97,19 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 
+    // Go to registration screen
     private void handleRegister() {
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
     }
 
+    // Go to password reset screen
     private void handleForgotPassword() {
         Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
         startActivity(intent);
     }
 
+    // Check if email and password are valid
     private boolean validateInput(String email, String password) {
         boolean valid = true;
 
@@ -126,6 +136,7 @@ public class LoginActivity extends AppCompatActivity {
         return valid;
     }
 
+    // Go to main screen and clear previous screens
     private void startMainActivity() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -11,7 +11,9 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
 
+// Activity for password reset functionality
 public class ResetPasswordActivity extends AppCompatActivity {
+    // UI elements
     private TextInputEditText etEmail;
     private MaterialButton btnResetPassword;
     private TextView tvBackToLogin;
@@ -22,22 +24,26 @@ public class ResetPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
 
+        // Initialize Firebase Auth
         firebaseAuth = FirebaseAuth.getInstance();
         initViews();
         setupClickListeners();
     }
 
+    // Initialize UI elements
     private void initViews() {
         etEmail = findViewById(R.id.etEmail);
         btnResetPassword = findViewById(R.id.btnResetPassword);
         tvBackToLogin = findViewById(R.id.tvBackToLogin);
     }
 
+    // Set up button click listeners
     private void setupClickListeners() {
         btnResetPassword.setOnClickListener(v -> attemptResetPassword());
         tvBackToLogin.setOnClickListener(v -> finish());
     }
 
+    // Handle password reset process
     private void attemptResetPassword() {
         String email = Objects.requireNonNull(etEmail.getText()).toString().trim();
 
@@ -47,6 +53,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
         btnResetPassword.setEnabled(false);
 
+        // Send password reset email using Firebase
         firebaseAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -57,6 +64,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
                 });
     }
 
+    // Check if email is valid
     private boolean validateEmail(String email) {
         if (TextUtils.isEmpty(email)) {
             etEmail.setError("Required");
@@ -69,6 +77,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         return true;
     }
 
+    // Show success message and close activity
     private void showSuccessMessage() {
         Toast.makeText(this,
                 "Password reset email sent. Please check your inbox.",
@@ -76,6 +85,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         finish();
     }
 
+    // Handle errors during password reset
     private void handleResetError(Exception exception) {
         btnResetPassword.setEnabled(true);
 

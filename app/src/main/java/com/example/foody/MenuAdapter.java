@@ -18,20 +18,24 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+// Adapter class for displaying menu items in a RecyclerView with quantity controls
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder> {
     private final List<MenuItem> menuItems;
     private final OnMenuItemClickListener listener;
 
+    // Interface for handling menu item quantity changes
     public interface OnMenuItemClickListener {
         void onAddItem(MenuItem item);
         void onRemoveItem(MenuItem item);
     }
 
+    // Constructor initializing the adapter with menu items and click listener
     public MenuAdapter(List<MenuItem> menuItems, OnMenuItemClickListener listener) {
         this.menuItems = new ArrayList<>(menuItems);
         this.listener = listener;
     }
 
+    // Update menu items using DiffUtil for efficient updates
     public void updateMenuItems(List<MenuItem> newItems) {
         MenuItemDiffCallback diffCallback = new MenuItemDiffCallback(menuItems, newItems);
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
@@ -41,6 +45,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         diffResult.dispatchUpdatesTo(this);
     }
 
+    // Create new views for menu items
     @NonNull
     @Override
     public MenuViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -49,15 +54,18 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         return new MenuViewHolder(view);
     }
 
+    // Bind data to views for each menu item
     @Override
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
         MenuItem item = menuItems.get(position);
 
+        // Set text fields
         holder.tvName.setText(item.getName());
         holder.tvDescription.setText(item.getDescription());
         holder.tvPrice.setText(String.format(Locale.US, "$%.2f", item.getPrice()));
         holder.tvQuantity.setText(String.valueOf(item.getQuantity()));
 
+        // Load item image using Glide if available
         if (item.getImageUrl() != null && !item.getImageUrl().isEmpty()) {
             Glide.with(holder.itemView.getContext())
                     .load(item.getImageUrl())
@@ -65,12 +73,14 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
                     .into(holder.ivMenuItem);
         }
 
+        // Set up add button click listener
         holder.btnAdd.setOnClickListener(v -> {
             item.setQuantity(item.getQuantity() + 1);
             holder.tvQuantity.setText(String.valueOf(item.getQuantity()));
             listener.onAddItem(item);
         });
 
+        // Set up remove button click listener
         holder.btnRemove.setOnClickListener(v -> {
             if (item.getQuantity() > 0) {
                 item.setQuantity(item.getQuantity() - 1);
@@ -85,6 +95,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         return menuItems.size();
     }
 
+    // ViewHolder class to cache view references
     public static class MenuViewHolder extends RecyclerView.ViewHolder {
         ImageView ivMenuItem;
         TextView tvName;
@@ -106,6 +117,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         }
     }
 
+    // DiffUtil callback for efficient list updates
     private static class MenuItemDiffCallback extends DiffUtil.Callback {
         private final List<MenuItem> oldList;
         private final List<MenuItem> newList;
@@ -125,11 +137,13 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
             return newList.size();
         }
 
+        // Check if items are the same based on ID
         @Override
         public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
             return Objects.equals(oldList.get(oldItemPosition).getId(), newList.get(newItemPosition).getId());
         }
 
+        // Check if item contents are the same
         @Override
         public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
             MenuItem oldItem = oldList.get(oldItemPosition);

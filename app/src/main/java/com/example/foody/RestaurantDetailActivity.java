@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+// Activity for displaying restaurant details, menu items and handling cart operations
 public class RestaurantDetailActivity extends AppCompatActivity implements MenuAdapter.OnMenuItemClickListener {
     private RecyclerView menuRecyclerView;
     private MenuAdapter menuAdapter;
@@ -44,12 +45,14 @@ public class RestaurantDetailActivity extends AppCompatActivity implements MenuA
         loadMenuItems();
     }
 
+    // Initialize UI elements and set up click listeners
     private void setupViews() {
         menuRecyclerView = findViewById(R.id.menuRecyclerView);
         bottomSheet = findViewById(R.id.bottomSheet);
         tvCartTotal = findViewById(R.id.tvCartTotal);
         btnViewCart = findViewById(R.id.btnViewCart);
 
+        // Set up cart button click listener
         btnViewCart.setOnClickListener(v -> {
             Intent intent = new Intent(this, CartActivity.class);
             intent.putExtra("cartItems", new ArrayList<>(cartItems.values()));
@@ -57,11 +60,13 @@ public class RestaurantDetailActivity extends AppCompatActivity implements MenuA
         });
     }
 
+    // Initialize bottom sheet for cart summary
     private void setupBottomSheet() {
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
+    // Load and display restaurant information
     private void loadRestaurantDetails(Restaurant restaurant) {
         ImageView ivRestaurantImage = findViewById(R.id.ivRestaurantImage);
         TextView tvRestaurantName = findViewById(R.id.tvRestaurantName);
@@ -70,11 +75,13 @@ public class RestaurantDetailActivity extends AppCompatActivity implements MenuA
         TextView tvDeliveryTime = findViewById(R.id.tvDeliveryTime);
         TextView tvPriceRange = findViewById(R.id.tvPriceRange);
 
+        // Load restaurant image using Glide
         Glide.with(this)
                 .load(restaurant.getImageUrl())
                 .centerCrop()
                 .into(ivRestaurantImage);
 
+        // Set restaurant details
         tvRestaurantName.setText(restaurant.getName());
         tvCuisine.setText(restaurant.getCuisine());
         tvRating.setText(String.format(Locale.US, "%.1f★", restaurant.getRating()));
@@ -82,6 +89,7 @@ public class RestaurantDetailActivity extends AppCompatActivity implements MenuA
         tvPriceRange.setText(restaurant.getPriceRange());
     }
 
+    // Initialize menu RecyclerView
     private void setupMenuRecyclerView() {
         menuRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         List<MenuItem> menuItems = new ArrayList<>();
@@ -89,10 +97,12 @@ public class RestaurantDetailActivity extends AppCompatActivity implements MenuA
         menuRecyclerView.setAdapter(menuAdapter);
     }
 
+    // Load menu items based on restaurant cuisine type
     private void loadMenuItems() {
         List<MenuItem> menuItems = new ArrayList<>();
         String cuisine = currentRestaurant.getCuisine().toLowerCase();
 
+        // Add menu items based on cuisine type
         if (cuisine.contains("asian") || cuisine.contains("chinese") || cuisine.contains("japanese")) {
             menuItems.add(new MenuItem(
                     "asian1",
@@ -185,12 +195,14 @@ public class RestaurantDetailActivity extends AppCompatActivity implements MenuA
         menuAdapter.updateMenuItems(menuItems);
     }
 
+    // Handle adding items to cart
     @Override
     public void onAddItem(MenuItem item) {
         cartItems.put(item.getId(), item);
         updateCartTotal();
     }
 
+    // Handle removing items from cart
     @Override
     public void onRemoveItem(MenuItem item) {
         if (item.getQuantity() == 0) {
@@ -201,14 +213,18 @@ public class RestaurantDetailActivity extends AppCompatActivity implements MenuA
         updateCartTotal();
     }
 
+    // Update cart total and manage bottom sheet visibility
     private void updateCartTotal() {
         double total = 0;
         int itemCount = 0;
+
+        // Calculate total price and item count
         for (MenuItem item : cartItems.values()) {
             total += item.getPrice() * item.getQuantity();
             itemCount += item.getQuantity();
         }
 
+        // Update UI elements based on cart state
         tvCartTotal.setText(String.format(Locale.US, "$%.2f (%d items)", total, itemCount));
 
         if (itemCount > 0) {

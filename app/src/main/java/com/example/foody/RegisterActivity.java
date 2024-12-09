@@ -12,7 +12,9 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
 
+// Activity for user registration
 public class RegisterActivity extends AppCompatActivity {
+    // UI elements
     private TextInputEditText etEmail, etPassword, etConfirmPassword;
     private MaterialButton btnRegister;
     private TextView tvBackToLogin;
@@ -23,11 +25,13 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        // Initialize Firebase Auth
         firebaseAuth = FirebaseAuth.getInstance();
         initViews();
         setupClickListeners();
     }
 
+    // Initialize all UI elements
     private void initViews() {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
@@ -36,11 +40,13 @@ public class RegisterActivity extends AppCompatActivity {
         tvBackToLogin = findViewById(R.id.tvBackToLogin);
     }
 
+    // Set up click listeners for buttons
     private void setupClickListeners() {
         btnRegister.setOnClickListener(v -> attemptRegister());
         tvBackToLogin.setOnClickListener(v -> finish());
     }
 
+    // Handle the registration process
     private void attemptRegister() {
         String email = Objects.requireNonNull(etEmail.getText()).toString().trim();
         String password = Objects.requireNonNull(etPassword.getText()).toString().trim();
@@ -52,6 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         btnRegister.setEnabled(false);
 
+        // Create new user with Firebase
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
@@ -62,9 +69,11 @@ public class RegisterActivity extends AppCompatActivity {
                 });
     }
 
+    // Validate user input for registration
     private boolean validateInput(String email, String password, String confirmPassword) {
         boolean valid = true;
 
+        // Check email
         if (TextUtils.isEmpty(email)) {
             etEmail.setError("Required");
             valid = false;
@@ -75,6 +84,7 @@ public class RegisterActivity extends AppCompatActivity {
             etEmail.setError(null);
         }
 
+        // Check password
         if (TextUtils.isEmpty(password)) {
             etPassword.setError("Required");
             valid = false;
@@ -85,6 +95,7 @@ public class RegisterActivity extends AppCompatActivity {
             etPassword.setError(null);
         }
 
+        // Check password confirmation
         if (TextUtils.isEmpty(confirmPassword)) {
             etConfirmPassword.setError("Required");
             valid = false;
@@ -98,6 +109,7 @@ public class RegisterActivity extends AppCompatActivity {
         return valid;
     }
 
+    // Handle registration errors and show appropriate messages
     private void handleRegistrationError(Exception exception) {
         btnRegister.setEnabled(true);
         String errorMessage = "Registration failed";
@@ -114,6 +126,7 @@ public class RegisterActivity extends AppCompatActivity {
         Toast.makeText(RegisterActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 
+    // Start main activity after successful registration
     private void startMainActivity() {
         Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
