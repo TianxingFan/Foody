@@ -81,13 +81,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     // ViewHolder class to cache view references for cart items
     public static class CartViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivMenuItem;     // Item image
-        TextView tvName;          // Item name
-        TextView tvPrice;         // Unit price
-        TextView tvQuantity;      // Item quantity
-        TextView tvItemTotal;     // Total price for this item
-        ImageButton btnAdd;       // Increase quantity button
-        ImageButton btnRemove;    // Decrease quantity button
+        ImageView ivMenuItem;
+        TextView tvName;
+        TextView tvPrice;
+        TextView tvQuantity;
+        TextView tvItemTotal;
+        ImageButton btnAdd;
+        ImageButton btnRemove;
 
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
